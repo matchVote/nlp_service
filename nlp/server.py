@@ -9,7 +9,6 @@ app = Sanic()
 @app.route('/classify', methods=['POST'])
 async def classify(request):
     text = request.json.get('text')
-    c = Classifier(text).classification
     return json({'classification': Classifier(text).classification})
 
 
