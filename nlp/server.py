@@ -1,13 +1,16 @@
 from sanic import Sanic
 from sanic.response import json
 
+from nlp import Classifier
+
 app = Sanic()
 
 
-@app.route('/')
-async def test(request):
-    print(request)
-    return json({'hello': 'there'})
+@app.route('/classify', methods=['POST'])
+async def classify(request):
+    text = request.json.get('text')
+    c = Classifier(text).classification
+    return json({'classification': Classifier(text).classification})
 
 
 if __name__ == '__main__':
