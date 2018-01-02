@@ -1,7 +1,11 @@
 import json
 import pytest
 
-from nlp.server import app
+from src.models import Official
+from src.server import app
+
+with open('tests/support/sample_text.txt') as f:
+    SAMPLE_TEXT = f.read()
 
 
 class TestIntegration:
@@ -17,3 +21,41 @@ class TestIntegration:
         _, response = app.test_client.post('/classify', data=data)
         assert response.status == 200
         assert response.json.get('classification') == 'political'
+
+    def test_analyze_calculates_text_read_time_in_minutes_rounded_up(self):
+        # data = json.dumps({'text': 'A long time ago in a galaxy far, far away...'})
+        data = json.dumps({'text': SAMPLE_TEXT})
+        _, response = app.test_client.post('/analyze', data=data)
+        assert response.status == 200
+        assert response.json.get('read_time') == 2
+
+    def test_analyze_extracts_keywords(self):
+        data = json.dumps({'text': SAMPLE_TEXT, 'title': 'Murakami lives'})
+        _, response = app.test_client.post('/analyze', data=data)
+        assert response.status == 200
+        assert response.json.get('keywords')
+
+    def test_analyze_extracts_summary(self):
+        data = json.dumps({'text': SAMPLE_TEXT, 'title': 'Murakami lives'})
+        _, response = app.test_client.post('/analyze', data=data)
+        assert response.status == 200
+        assert response.json.get('summary')
+
+    def test_analyze_lists_all_known_officials_mentioned_in_text(self):
+        text = """
+        Once a trump man went to see heidi heitkamp and you what? Grace Meng
+        showed up. Whoa Al!
+        """
+        data = json.dumps({'text': text, 'title': 'Murakami lives'})
+        _, response = app.test_client.post('/analyze', data=data)
+        expected_ids = compile_official_ids(['Heitkamp', 'Meng'])
+        assert response.status == 200
+        ids = sorted(response.json.get('mentioned_officials_ids'))
+        print(f'expected ids: {expected_ids}')
+        print(f'actual ids: {ids}')
+        assert ids == expected_ids
+
+
+def compile_official_ids(last_names):
+    officials = Official.select().where(Official.last_name << last_names)
+    return sorted(str(official.id) for official in officials)

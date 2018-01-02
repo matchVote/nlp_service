@@ -4,7 +4,7 @@ import uuid
 from peewee import DateTimeField, IntegerField, Model, TextField, UUIDField
 from playhouse.postgres_ext import ArrayField
 
-from nlp import Database
+from .database import Database
 
 
 class BaseModel(Model):
