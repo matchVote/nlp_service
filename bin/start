@@ -6,4 +6,4 @@ if [ $NLP_ENV == "production" ]; then
 fi
 
 echo "Starting Dogood NLP Service"
-exec python -m nlp.server
+exec python -m src.server
