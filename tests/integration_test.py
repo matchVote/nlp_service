@@ -10,6 +10,20 @@ with open('tests/support/sample_text.txt') as f:
 
 class TestIntegration:
 
+    def test_extract_returns_relevant_data(arg):
+        with open('tests/support/sample_article.html') as f:
+            html = f.read()
+        data = json.dumps({'html': html})
+        _, response = app.test_client.post('/extract', data=data)
+
+        expected_title = 'Net Neutrality Supporters Launch New Campaign To '\
+            'Reverse Unpopular FCC Decision'
+        assert response.status == 200
+        assert response.json.get('title') == expected_title
+        assert 'Ryan Grenoble' in response.json.get('authors')
+        assert response.json.get('date_published')
+        assert response.json.get('text')
+
     def test_classify_returns_unknown_when_text_does_not_match(self):
         data = json.dumps({'text': 'hey there'})
         _, response = app.test_client.post('/classify', data=data)

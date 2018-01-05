@@ -6,6 +6,13 @@ from src import nlp
 app = Sanic()
 
 
+@app.route('/extract', methods=['POST'])
+async def extract(request):
+    html = request.json.get('html')
+    data = nlp.parse(html)
+    return json(data)
+
+
 @app.route('/classify', methods=['POST'])
 async def classify(request):
     text = request.json.get('text')

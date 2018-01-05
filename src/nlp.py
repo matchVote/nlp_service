@@ -9,6 +9,19 @@ from .models import Official
 AVERAGE_WPM = 250
 
 
+def parse(html):
+    article = Article(url='http://')
+    article.download_state = 'done'
+    article.html = html
+    article.parse()
+    return {
+        'title': article.title,
+        'authors': article.authors,
+        'date_published': article.publish_date,
+        'text': article.text,
+        }
+
+
 def classify(text):
     classification = None
     text = text.lower()
