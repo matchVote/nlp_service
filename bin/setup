@@ -3,7 +3,7 @@
 ENVS=(dev test)
 for ENV in "${ENVS[@]}"
 do
-  docker-compose run --rm -e NLP_ENV=$ENV nlp python -m nlp.database_setup
+  docker-compose run --rm -e NLP_ENV=$ENV nlp python -m src.database_setup
 done
 
 echo "Done...party on!"

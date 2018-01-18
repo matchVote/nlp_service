@@ -54,8 +54,8 @@ def extract_summary_and_keywords(text, title):
 def mentioned_officials_ids(text):
     ids = []
     for first_name, last_name in extract_full_official_names(text):
-        condition = Official.first_name == first_name.capitalize() and \
-            Official.last_name == last_name.capitalize()
+        condition = Official.first_name == first_name and \
+            Official.last_name == last_name
         official = Official.select().where(condition)[0]
         ids.append(str(official.id))
     return ids
@@ -71,7 +71,7 @@ def extract_full_official_names(text):
         if first_names:
             previous_word = words[index-1]
             if previous_word in first_names:
-                full_names.add((previous_word, current_word))
+                full_names.add((previous_word.lower(), current_word.lower()))
     return full_names
 
 

@@ -62,7 +62,7 @@ class TestIntegration:
         """
         data = json.dumps({'text': text, 'title': 'Murakami lives'})
         _, response = app.test_client.post('/analyze', data=data)
-        expected_ids = compile_official_ids(['Heitkamp', 'Meng'])
+        expected_ids = compile_official_ids(['heitkamp', 'meng'])
         assert response.status == 200
         ids = sorted(response.json.get('mentioned_officials_ids'))
         print(f'expected ids: {expected_ids}')

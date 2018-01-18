@@ -4,8 +4,8 @@ import time
 
 from peewee import OperationalError
 
-from nlp import Database
-from nlp.models import Article, ArticleOfficial, Official
+from src.database import Database
+from src.models import Article, ArticleOfficial, Official
 
 env = os.getenv('NLP_ENV')
 db = Database()
@@ -31,5 +31,7 @@ if env in ['dev', 'test']:
         rows = csv.reader(f)
         next(rows)
         for first_name, last_name in rows:
-            Official.create(first_name=first_name, last_name=last_name)
+            Official.create(
+                first_name=first_name.lower(),
+                last_name=last_name.lower())
     print(f'{len(Official.select())} total')
