@@ -19,6 +19,7 @@ def parse(html):
         'authors': article.authors,
         'date_published': article.publish_date,
         'text': article.text,
+        'top_image_url': article.top_image,
         }
 
 

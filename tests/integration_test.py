@@ -23,6 +23,7 @@ class TestIntegration:
         assert 'Ryan Grenoble' in response.json.get('authors')
         assert response.json.get('date_published')
         assert response.json.get('text')
+        assert response.json.get('top_image_url')
 
     def test_classify_returns_unknown_when_text_does_not_match(self):
         data = json.dumps({'text': 'hey there'})
