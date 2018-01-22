@@ -6,10 +6,17 @@ from src import nlp
 app = Sanic()
 
 
+@app.route('/parse_source', methods=['POST'])
+async def parse_source(request):
+    url = request.json.get('url')
+    article_urls = nlp.parse_source(url)
+    return json({'article_urls': article_urls})
+
+
 @app.route('/extract', methods=['POST'])
 async def extract(request):
     html = request.json.get('html')
-    data = nlp.parse(html)
+    data = nlp.extract(html)
     return json(data)
 
 
@@ -34,4 +41,4 @@ async def analyze(request):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8000, access_log=True)

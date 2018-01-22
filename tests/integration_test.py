@@ -10,7 +10,7 @@ with open('tests/support/sample_text.txt') as f:
 
 class TestIntegration:
 
-    def test_extract_returns_relevant_data(arg):
+    def test_extract_returns_relevant_data(self):
         with open('tests/support/sample_article.html') as f:
             html = f.read()
         data = json.dumps({'html': html})
@@ -38,7 +38,6 @@ class TestIntegration:
         assert response.json.get('classification') == 'political'
 
     def test_analyze_calculates_text_read_time_in_minutes_rounded_up(self):
-        # data = json.dumps({'text': 'A long time ago in a galaxy far, far away...'})
         data = json.dumps({'text': SAMPLE_TEXT})
         _, response = app.test_client.post('/analyze', data=data)
         assert response.status == 200

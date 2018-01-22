@@ -1,7 +1,7 @@
 import math
 import re
 
-from newspaper import Article
+from newspaper import Article, Source
 
 from .repo import Repo
 from .models import Official
@@ -9,7 +9,14 @@ from .models import Official
 AVERAGE_WPM = 250
 
 
-def parse(html):
+def parse_source(url):
+    source = Source(url, memoize_articles=False)
+    source.build()
+    print(f'Done building source: {url}')
+    return [article.url for article in source.articles]
+
+
+def extract(html):
     article = Article(url='http://')
     article.download_state = 'done'
     article.html = html
