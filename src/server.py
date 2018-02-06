@@ -1,3 +1,5 @@
+import os
+
 from sanic import Sanic
 from sanic.response import json
 
@@ -41,4 +43,4 @@ async def analyze(request):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, access_log=True)
+    app.run(host='0.0.0.0', port=os.getenv('SERVICE_PORT'), access_log=True)
