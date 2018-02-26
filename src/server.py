@@ -1,7 +1,7 @@
 import os
 
 from sanic import Sanic
-from sanic.response import json
+from sanic.response import json, text
 
 from src import nlp
 
@@ -40,6 +40,11 @@ async def analyze(request):
         'keywords': keywords,
         }
     return json(data)
+
+
+@app.route('/hc', methods=['GET'])
+async def hc(request):
+    return text('ok')
 
 
 if __name__ == '__main__':
