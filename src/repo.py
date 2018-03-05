@@ -44,3 +44,7 @@ class Repo:
     def _convert_filters_to_clauses(self, filters):
         return [getattr(self.model, field) == value
                 for field, value in filters.items()]
+
+
+def lower(field):
+    return peewee.fn.Lower(field)

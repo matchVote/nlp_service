@@ -3,8 +3,8 @@ import re
 
 from newspaper import Article, Source
 
-from .repo import Repo
-from .models import Official
+from src.repo import Repo, lower
+from src.models import Official
 
 AVERAGE_WPM = 250
 
@@ -63,7 +63,8 @@ def mentioned_officials_ids(text):
     ids = []
     for full_name in extract_full_official_names(text):
         official = query_official(full_name)
-        ids.append(str(official.id))
+        if official:
+            ids.append(str(official.id))
     return ids
 
 
@@ -101,4 +102,5 @@ def query_official(full_name):
 
 def official_condition(full_name):
     first_name, last_name = full_name
-    return Official.first_name == first_name and Official.last_name == last_name
+    return lower(Official.first_name) == first_name and \
+        lower(Official.last_name) == last_name
