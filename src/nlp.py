@@ -61,10 +61,8 @@ def extract_summary_and_keywords(text, title):
 
 def mentioned_officials_ids(text):
     ids = []
-    for first_name, last_name in extract_full_official_names(text):
-        condition = Official.first_name == first_name and \
-            Official.last_name == last_name
-        official = Official.select().where(condition)[0]
+    for full_name in extract_full_official_names(text):
+        official = query_official(full_name)
         ids.append(str(official.id))
     return ids
 
@@ -91,3 +89,16 @@ def last_name_to_first_names_mapping():
         first_name = official.first_name.lower()
         mapping.setdefault(official.last_name.lower(), []).append(first_name)
     return mapping
+
+
+def query_official(full_name):
+    condition = official_condition(full_name)
+    try:
+        return Official.select().where(condition)[0]
+    except IndexError:
+        print(f'Official not found: {full_name}')
+
+
+def official_condition(full_name):
+    first_name, last_name = full_name
+    return Official.first_name == first_name and Official.last_name == last_name
