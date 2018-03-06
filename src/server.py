@@ -8,17 +8,17 @@ from src import nlp
 app = Sanic()
 
 
-@app.route('/parse_source', methods=['POST'])
-async def parse_source(request):
+@app.route('/parse_publisher', methods=['POST'])
+async def parse_publisher(request):
     url = request.json.get('url')
-    article_urls = nlp.parse_source(url)
+    article_urls = nlp.parse_publisher(url)
     return json({'article_urls': article_urls})
 
 
-@app.route('/extract', methods=['POST'])
+@app.route('/parse_article', methods=['POST'])
 async def extract(request):
     html = request.json.get('html')
-    data = nlp.extract(html)
+    data = nlp.parse_article(html)
     return json(data)
 
 

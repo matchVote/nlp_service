@@ -9,14 +9,14 @@ from src.models import Official
 AVERAGE_WPM = 250
 
 
-def parse_source(url):
+def parse_publisher(url):
     source = Source(url, memoize_articles=False)
     source.build()
     print(f'Done building source: {url}')
     return [article.url for article in source.articles]
 
 
-def extract(html):
+def parse_article(html):
     article = Article(url='http://')
     article.download_state = 'done'
     article.html = html
