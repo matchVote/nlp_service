@@ -14,7 +14,7 @@ class TestIntegration:
         with open('tests/support/sample_article.html') as f:
             html = f.read()
         data = json.dumps({'html': html})
-        _, response = app.test_client.post('/extract', data=data)
+        _, response = app.test_client.post('/parse_article', data=data)
 
         expected_title = 'Net Neutrality Supporters Launch New Campaign To '\
             'Reverse Unpopular FCC Decision'
