@@ -58,16 +58,17 @@ class TestIntegration:
     def test_analyze_lists_all_known_officials_mentioned_in_text(self):
         text = """
         Once a trump man went to see heidi heitkamp and you what? Grace Meng
-        showed up. Whoa Al!
+        showed up. Whoa Al gRacE meNg was a snopper!
         """
         data = json.dumps({'text': text, 'title': 'Murakami lives'})
         _, response = app.test_client.post('/analyze', data=data)
         expected_ids = compile_official_ids(['heitkamp', 'meng'])
         assert response.status == 200
-        ids = sorted(response.json.get('mentioned_officials_ids'))
-        print(f'expected ids: {expected_ids}')
-        print(f'actual ids: {ids}')
+
+        officials = response.json.get('mentioned_officials')
+        ids = sorted(officials.keys())
         assert ids == expected_ids
+        assert list(officials.values()) == [1, 2]
 
 
 def compile_official_ids(last_names):

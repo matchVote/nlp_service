@@ -59,26 +59,28 @@ def extract_summary_and_keywords(text, title):
     return article.summary, article.keywords
 
 
-def mentioned_officials_ids(text):
-    ids = []
-    for full_name in extract_full_official_names(text):
+def mentioned_officials(text):
+    officials = {}
+    for full_name, count in extract_full_official_names(text).items():
         official = query_official(full_name)
         if official:
-            ids.append(str(official.id))
-    return ids
+            officials[str(official.id)] = count
+    return officials
 
 
 def extract_full_official_names(text):
     text = text.lower()
     mapping = last_name_to_first_names_mapping()
     words = re.split(r'\W', text)
-    full_names = set()
+    full_names = {}
     for index, current_word in enumerate(words):
         first_names = mapping.get(current_word, False)
         if first_names:
             previous_word = words[index-1]
             if previous_word in first_names:
-                full_names.add((previous_word.lower(), current_word.lower()))
+                full_name = (previous_word.lower(), current_word.lower())
+                count = full_names.get(full_name, 0)
+                full_names[full_name] = count + 1
     return full_names
 
 
@@ -95,12 +97,12 @@ def last_name_to_first_names_mapping():
 def query_official(full_name):
     condition = official_condition(full_name)
     try:
-        return Official.select().where(condition)[0]
+        return Official.select().where(*condition)[0]
     except IndexError:
         print(f'Official not found: {full_name}')
 
 
 def official_condition(full_name):
     first_name, last_name = full_name
-    return lower(Official.first_name) == first_name and \
-        lower(Official.last_name) == last_name
+    return (lower(Official.first_name) == first_name,
+            lower(Official.last_name) == last_name)

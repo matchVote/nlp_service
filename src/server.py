@@ -35,7 +35,7 @@ async def analyze(request):
     summary, keywords = nlp.extract_summary_and_keywords(text, title)
     data = {
         'read_time': nlp.calculate_read_time(text),
-        'mentioned_officials_ids': nlp.mentioned_officials_ids(text),
+        'mentioned_officials': nlp.mentioned_officials(text),
         'summary': summary,
         'keywords': keywords,
         }
