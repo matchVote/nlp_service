@@ -22,7 +22,7 @@ class TestNLP:
 
     def find_official(self, officials, id):
         for official in officials:
-            if official['official_id'] == id:
+            if official['representative_id'] == id:
                 return official
 
     def test_classify_returns_political_if_text_contains_official_names(self):
@@ -35,7 +35,7 @@ class TestNLP:
 
     def test_mentioned_officials_provides_ids(self):
         results = nlp.mentioned_officials(self.big_text)
-        ids = [official['official_id'] for official in results]
+        ids = [official['representative_id'] for official in results]
         expected_ids = self.official_ids()
         assert expected_ids == ids
 
@@ -43,8 +43,8 @@ class TestNLP:
         results = nlp.mentioned_officials(self.big_text)
         ids = self.official_ids()
         sherrod = self.find_official(results, ids[0])
-        assert sherrod['count'] == 3
+        assert sherrod['mentioned_count'] == 3
         bill = self.find_official(results, ids[1])
-        assert bill['count'] == 1
+        assert bill['mentioned_count'] == 1
         barack = self.find_official(results, ids[2])
-        assert barack['count'] == 2
+        assert barack['mentioned_count'] == 2

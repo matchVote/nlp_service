@@ -64,7 +64,10 @@ def mentioned_officials(text):
     for full_name, count in extract_full_official_names(text).items():
         official = query_official(full_name)
         if official:
-            officials.append({'official_id': str(official.id), 'count': count})
+            officials.append({
+                'representative_id': str(official.id),
+                'mentioned_count': count
+                })
     return officials
 
 

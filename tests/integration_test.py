@@ -66,8 +66,8 @@ class TestIntegration:
         assert response.status == 200
 
         officials = response.json.get('mentioned_officials')
-        ids = sorted(o['official_id'] for o in officials)
-        counts = [o['count'] for o in officials]
+        ids = sorted(o['representative_id'] for o in officials)
+        counts = [o['mentioned_count'] for o in officials]
         assert ids == expected_ids
         assert counts == [1, 2]
 
