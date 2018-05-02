@@ -20,6 +20,11 @@ class TestNLP:
         obama = Official.select().where(Official.first_name == 'barack')[0]
         return [str(sherrod.id), str(bill.id), str(obama.id)]
 
+    def find_official(self, officials, id):
+        for official in officials:
+            if official['official_id'] == id:
+                return official
+
     def test_classify_returns_political_if_text_contains_official_names(self):
         text = 'Hey there, Sherrod brown!'
         assert nlp.classify(text) == 'political'
@@ -28,13 +33,18 @@ class TestNLP:
         text = 'No politics here.'
         assert not nlp.classify(text)
 
-    def test_mentioned_officials_returns_dict_with_ids_of_officials_as_keys(self):
+    def test_mentioned_officials_provides_ids(self):
         results = nlp.mentioned_officials(self.big_text)
-        assert set(results.keys()) == set(self.official_ids())
+        ids = [official['official_id'] for official in results]
+        expected_ids = self.official_ids()
+        assert expected_ids == ids
 
-    def test_mentioned_officials_returns_number_of_times_officials_are_mentioned(self):
+    def test_mentioned_officials_provides_mentioned_counts(self):
         results = nlp.mentioned_officials(self.big_text)
         ids = self.official_ids()
-        assert results[ids[0]] == 3
-        assert results[ids[1]] == 1
-        assert results[ids[2]] == 2
+        sherrod = self.find_official(results, ids[0])
+        assert sherrod['count'] == 3
+        bill = self.find_official(results, ids[1])
+        assert bill['count'] == 1
+        barack = self.find_official(results, ids[2])
+        assert barack['count'] == 2

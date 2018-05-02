@@ -60,11 +60,11 @@ def extract_summary_and_keywords(text, title):
 
 
 def mentioned_officials(text):
-    officials = {}
+    officials = []
     for full_name, count in extract_full_official_names(text).items():
         official = query_official(full_name)
         if official:
-            officials[str(official.id)] = count
+            officials.append({'official_id': str(official.id), 'count': count})
     return officials
 
 
