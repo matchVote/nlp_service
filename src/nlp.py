@@ -23,11 +23,18 @@ def parse_article(html):
     article.parse()
     return {
         'title': article.title,
-        'authors': article.authors,
+        'authors': _extract_first_full_name(article.authors),
         'date_published': article.publish_date,
         'text': article.text,
         'top_image_url': article.top_image,
         }
+
+
+def _extract_first_full_name(authors):
+    try:
+        return re.search(r'(\w+\s\w+)', authors[0])[1]
+    except (IndexError, TypeError):
+        return []
 
 
 def classify(text):
