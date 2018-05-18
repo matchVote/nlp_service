@@ -32,7 +32,7 @@ def parse_article(html):
 
 def _extract_first_full_name(authors):
     try:
-        return re.search(r'(\w+\s\w+)', authors[0])[1]
+        return [re.search(r'(\w+\s\w+)', authors[0])[1]]
     except (IndexError, TypeError):
         return []
 
