@@ -51,8 +51,8 @@ class TestNLP:
 
     def test_extract_first_full_name_returns_full_name_of_first_author(arg):
         data = ['Hey Bo something again', 'anything', '...']
-        assert nlp._extract_first_full_name(data) == 'Hey Bo'
-        assert nlp._extract_first_full_name(['Bob Jones']) == 'Bob Jones'
+        assert nlp._extract_first_full_name(data) == ['Hey Bo']
+        assert nlp._extract_first_full_name(['Bob Jones']) == ['Bob Jones']
 
     def test_extract_first_full_name_returns_empty_list_with_no_match(arg):
         assert nlp._extract_first_full_name([]) == []
