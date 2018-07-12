@@ -26,7 +26,7 @@ def parse_article(html):
         'authors': _extract_first_full_name(article.authors),
         'date_published': article.publish_date,
         'text': article.text,
-        'top_image_url': article.top_image,
+        'top_image_url': _force_https(article.top_image),
         }
 
 
@@ -35,6 +35,12 @@ def _extract_first_full_name(authors):
         return [re.search(r'(\w+\s\w+)', authors[0])[1]]
     except (IndexError, TypeError):
         return []
+
+
+def _force_https(url):
+    if url.startswith('http:'):
+        return url.replace('http', 'https')
+    return url
 
 
 def classify(text):
