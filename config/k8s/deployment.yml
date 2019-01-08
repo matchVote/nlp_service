@@ -24,15 +24,14 @@ spec:
             - containerPort: 9000
               name: http-server
               protocol: TCP
-          # readinessProbe:
-          #   httpGet:
-          #     path: /hc
-          #     port: http-server
-          #     httpHeaders:
-          #       - name: host
-          #         value: nlp
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 10
-          #   timeoutSeconds: 5
-          #   failureThreshold: 3
-          #   successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /hc
+              port: http-server
+              httpHeaders:
+                - name: host
+                  value: nlp
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
