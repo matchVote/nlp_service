@@ -1,4 +1,4 @@
-# Dogood NLP Service
+# NLP Service
 Performs natural language processing operations
 
 ### Development Setup
