@@ -12,17 +12,32 @@ class TestNLP:
     barack obama and barack obama he knows my name, ShErrod brown.
     """
 
+    @classmethod
+    def setup_class(cls):
+        """Populate DB"""
+        Official.create(first_name='Sherrod',
+                        last_name='Brown', mv_key='sherrod-brown')
+        Official.create(first_name='William',
+                        last_name='Clinton', mv_key='william-clinton')
+        Official.create(first_name='Barack',
+                        last_name='Obama', mv_key='barack-obama')
+
+    @classmethod
+    def teardown_class(cls):
+        """Clear DB"""
+        Official.delete().execute()
+
     def official_ids(self):
-        sherrod = Official.select().where(Official.first_name == 'sherrod')[0]
+        sherrod = Official.select().where(Official.first_name == 'Sherrod')[0]
         bill = Official.select().where(
-            Official.first_name == 'william',
-            Official.last_name == 'clinton')[0]
-        obama = Official.select().where(Official.first_name == 'barack')[0]
+            Official.first_name == 'William',
+            Official.last_name == 'Clinton')[0]
+        obama = Official.select().where(Official.first_name == 'Barack')[0]
         return [str(sherrod.id), str(bill.id), str(obama.id)]
 
     def find_official(self, officials, id):
         for official in officials:
-            if official['representative_id'] == id:
+            if official['official_id'] == id:
                 return official
 
     def test_classify_returns_political_if_text_contains_official_names(self):
@@ -35,7 +50,7 @@ class TestNLP:
 
     def test_mentioned_officials_provides_ids(self):
         results = nlp.mentioned_officials(self.big_text)
-        ids = [official['representative_id'] for official in results]
+        ids = [official['official_id'] for official in results]
         expected_ids = self.official_ids()
         assert expected_ids == ids
 

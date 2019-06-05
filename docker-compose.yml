@@ -9,10 +9,3 @@ services:
       - .:/usr/src/app
     ports:
       - "8000:8000"
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgres:9.6.1
-    ports:
-      - "5444:5432"

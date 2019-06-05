@@ -27,7 +27,7 @@ def parse_article(html):
         'date_published': article.publish_date,
         'text': article.text,
         'top_image_url': _force_https(article.top_image),
-        }
+    }
 
 
 def _extract_first_full_name(authors):
@@ -78,9 +78,9 @@ def mentioned_officials(text):
         official = query_official(full_name)
         if official:
             officials.append({
-                'representative_id': str(official.id),
+                'official_id': str(official.id),
                 'mentioned_count': count
-                })
+            })
     return officials
 
 

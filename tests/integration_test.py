@@ -32,10 +32,13 @@ class TestIntegration:
         assert response.json.get('classification') is None
 
     def test_classify_returns_political_when_text_contains_name_of_official(self):
+        Official.create(first_name='Reid', last_name='Ribble',
+                        mv_key='reid-ribble')
         data = json.dumps({'text': 'When Reid Ribble started...'})
         _, response = app.test_client.post('/classify', data=data)
         assert response.status == 200
         assert response.json.get('classification') == 'political'
+        Official.delete().execute()
 
     def test_analyze_calculates_text_read_time_in_minutes_rounded_up(self):
         data = json.dumps({'text': SAMPLE_TEXT})
@@ -56,20 +59,25 @@ class TestIntegration:
         assert response.json.get('summary')
 
     def test_analyze_lists_all_known_officials_mentioned_in_text(self):
+        Official.create(first_name='Grace', last_name='Meng',
+                        mv_key='grace-meng')
+        Official.create(first_name='Heidi', last_name='Heitkamp',
+                        mv_key='heidi-heitkamp')
         text = """
         Once a trump man went to see heidi heitkamp and you what? Grace Meng
         showed up. Whoa Al gRacE meNg was a snopper!
         """
         data = json.dumps({'text': text, 'title': 'Murakami lives'})
         _, response = app.test_client.post('/analyze', data=data)
-        expected_ids = compile_official_ids(['heitkamp', 'meng'])
+        expected_ids = compile_official_ids(['Heitkamp', 'Meng'])
         assert response.status == 200
 
         officials = response.json.get('mentioned_officials')
-        ids = sorted(o['representative_id'] for o in officials)
+        ids = sorted(o['official_id'] for o in officials)
         counts = [o['mentioned_count'] for o in officials]
         assert ids == expected_ids
         assert counts == [1, 2]
+        Official.delete().execute()
 
 
 def compile_official_ids(last_names):

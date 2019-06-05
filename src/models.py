@@ -32,27 +32,30 @@ class Article(BaseModel):
 
 
 class Official(BaseModel):
-    """ORM model for representatives table."""
+    """ORM model for officials table."""
 
     id = UUIDField(primary_key=True, default=uuid.uuid4)
     first_name = TextField()
     last_name = TextField()
     middle_name = TextField(null=True)
-    official_full_name = TextField(null=True)
+    official_name = TextField(null=True)
+    mv_key = TextField()
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
 
     class Meta:
-        db_table = 'representatives'
+        db_table = 'officials'
 
 
 class ArticleOfficial(BaseModel):
     """Join table for articles and officials."""
 
     article_id = IntegerField()
-    representative_id = UUIDField()
+    official_id = UUIDField()
     created_at = DateTimeField(default=datetime.now)
 
     class Meta:
-        db_table = 'articles_representatives'
+        db_table = 'articles_officials'
         indexes = (
-            (('article_id', 'representative_id'), True),
-            )
+            (('article_id', 'official_id'), True),
+        )
