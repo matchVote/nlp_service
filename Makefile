@@ -2,6 +2,10 @@
 
 APP_VSN ?= `cat .version`
 
+help:
+	@echo nlp_service:$(APP_VSN)
+	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
 setup: ## Set up app locally
 	docker-compose build
 
