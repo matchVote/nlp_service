@@ -20,3 +20,9 @@ version: ## Show latest app version
 
 build: ## Build the production Docker image
 	docker build -t nlp_service:$(APP_VSN) .
+
+heroku-push: ## Use Heroku to build production image and push to registry
+	heroku container:push web --verbose --app mv-nlp
+
+heroku-release: ## Deploy container from previously pushed image
+	heroku container:release web --app mv-nlp
