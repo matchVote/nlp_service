@@ -3,5 +3,5 @@ newspaper3k==0.2.5
 peewee==2.9.1
 psycopg2==2.7.1
 pytest==3.0.7
-sanic==0.7.0
+sanic==19.6.3
 numpy==1.16.4
