@@ -1,3 +1,4 @@
+import datetime
 import math
 import re
 
@@ -7,6 +8,7 @@ from src.repo import Repo, lower
 from src.models import Official
 
 AVERAGE_WPM = 250
+BIRTHDAY_CUTOFF = datetime.datetime(1919, 12, 31)
 
 
 def parse_publisher(url):
@@ -101,13 +103,19 @@ def extract_full_official_names(text):
 
 
 def last_name_to_first_names_mapping():
-    repo = Repo(Official)
-    officials = repo.select('first_name', 'last_name')
     mapping = {}
-    for official in officials:
+    for official in current_officials():
         first_name = official.first_name.lower()
         mapping.setdefault(official.last_name.lower(), []).append(first_name)
     return mapping
+
+
+def current_officials():
+    repo = Repo(Official)
+    select = repo.select('first_name', 'last_name').query
+    return select.where(
+        (repo.model.birthday > BIRTHDAY_CUTOFF) |
+        (repo.model.birthday.is_null(True)))
 
 
 def query_official(full_name):

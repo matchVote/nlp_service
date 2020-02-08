@@ -40,6 +40,7 @@ class Official(BaseModel):
     middle_name = TextField(null=True)
     official_name = TextField(null=True)
     mv_key = TextField()
+    birthday = DateTimeField()
     created_at = DateTimeField(default=datetime.now)
     updated_at = DateTimeField(default=datetime.now)
 

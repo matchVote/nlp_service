@@ -21,6 +21,14 @@ class TestNLP:
                         last_name='Clinton', mv_key='william-clinton')
         Official.create(first_name='Barack',
                         last_name='Obama', mv_key='barack-obama')
+        Official.create(first_name='Bobeck',
+                        last_name='Kuberdoodles',
+                        birthday='1919-12-31',
+                        mv_key='bobeck-kuberdoodles')
+        Official.create(first_name='Arcus',
+                        last_name='Post',
+                        birthday='1920-01-01',
+                        mv_key='arcus-post')
 
     @classmethod
     def teardown_class(cls):
@@ -41,11 +49,19 @@ class TestNLP:
                 return official
 
     def test_classify_returns_political_if_text_contains_official_names(self):
+        text = 'Hey there, Arcus Post!'
+        assert nlp.classify(text) == 'political'
+
+    def test_classify_returns_includes_officials_with_no_birthday_data(self):
         text = 'Hey there, Sherrod brown!'
         assert nlp.classify(text) == 'political'
 
     def test_classify_returns_none_if_text_does_not_contain_official_names(self):
         text = 'No politics here.'
+        assert not nlp.classify(text)
+
+    def test_classify_ignores_officials_born_before_birthday_cutoff(self):
+        text = 'Hey there, Bobeck Kuberdoodles!'
         assert not nlp.classify(text)
 
     def test_mentioned_officials_provides_ids(self):
