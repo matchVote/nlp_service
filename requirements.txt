@@ -4,4 +4,4 @@ peewee==2.9.1
 psycopg2==2.7.1
 pytest==3.0.7
 sanic==19.6.3
-numpy==1.16.4
+numpy==1.22.0
